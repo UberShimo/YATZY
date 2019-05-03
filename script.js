@@ -316,8 +316,14 @@ const store = new Vuex.Store({
             return v;
         },
         yatzy: function(state){
-            if(state.dices[0].number == state.dices[1].number == state.dices[2].number == state.dices[3].number == state.dices[4].number){
-                return 50;
+            if(state.dices[1].number == state.dices[0].number){
+                if(state.dices[2].number == state.dices[0].number){
+                    if(state.dices[3].number == state.dices[0].number){
+                        if(state.dices[4].number == state.dices[0].number){
+                            return 50;
+                        }
+                    }
+                }
             }
             else{
                 return 0;
@@ -334,8 +340,7 @@ const store = new Vuex.Store({
                     state.dices[i].rollFix = true;
                 }
             }
-            //Make the site "pause" while the CSS opacity effect is working... But this fucks my Yatzy getter for some reason....
-            //If you want to get YATZY you need to move the code outside of setTimeout.
+            //Make the site "pause" while the CSS opacity effect is working
             setTimeout(f => {
                 for(let i = 0; i < 5; i++){
                     if(!state.dices[i].locked){
