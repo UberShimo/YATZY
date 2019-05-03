@@ -1,0 +1,114 @@
+<html>
+    <head>
+        <title>YATZY</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="app">
+            <div id="playField">
+                <div id="scoreViewer">Score: {{$store.state.total}}</div>
+                
+                <div v-if="$store.state.round < 15">
+                    <div id="diceArea">
+                        <dice-holder v-for="(dice, index) in getDices" v-bind:dice="dice" v-bind:index="index"></dice-holder>
+                    </div>
+
+                    <div id="throwButton" v-on:click="throwDices">Throw</div>
+                    <div id="throwCounter">Throws left: {{$store.state.throws}}</div>
+                </div>
+                <div v-else>
+                    <div id="FINISH">You got {{$store.state.total}} points!</div>
+                </div>
+                <div id="restartButton" v-on:click="restart">Restart</div>
+            </div>
+
+            <div id="yatzyOptions">
+                <div v-on:click="chooseOnes">
+                    <div class="combo"><p>Ones:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.ones == undefined">{{$store.getters.ones}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.ones}}</div>
+                </div>
+                <div v-on:click="chooseTwos">
+                    <div class="combo"><p>Twos:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.twos == undefined">{{$store.getters.twos}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.twos}}</div>
+                </div>
+                <div v-on:click="chooseThrees">
+                    <div class="combo"><p>Threes:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.threes == undefined">{{$store.getters.threes}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.threes}}</div>
+                </div>
+                <div v-on:click="chooseFours">
+                    <div class="combo"><p>Fours:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.fours == undefined">{{$store.getters.fours}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.fours}}</div>
+                </div>
+                <div v-on:click="chooseFives">
+                    <div class="combo"><p>Fives:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.fives == undefined">{{$store.getters.fives}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.fives}}</div>
+                </div>
+                <div v-on:click="chooseSixes">
+                    <div class="combo"><p>Sixes:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.sixes == undefined">{{$store.getters.sixes}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.sixes}}</div>
+                </div>
+                <div>
+                    <div class="combo"><p>Bonus:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.bonus == undefined">{{$store.getters.bonus}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.bonus}}</div>
+                </div>
+                <div v-on:click="choosePair">
+                    <div class="combo"><p>Pair:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.pair == undefined">{{$store.getters.pair}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.pair}}</div>
+                </div>
+                <div v-on:click="chooseTwoPair">
+                    <div class="combo"><p>Two pair:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.twoPair == undefined">{{$store.getters.twoPair}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.twoPair}}</div>
+                </div>
+                <div v-on:click="chooseTripple">
+                    <div class="combo"><p>Three of a kind:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.tripple == undefined">{{$store.getters.tripple}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.tripple}}</div>
+                </div>
+                <div v-on:click="chooseQuad">
+                    <div class="combo"><p>Four of a kind:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.quad == undefined">{{$store.getters.quad}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.quad}}</div>
+                </div>
+                <div v-on:click="chooseLittleStairs">
+                    <div class="combo"><p>Small straight:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.littleStairs == undefined">{{$store.getters.littleStairs}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.littleStairs}}</div>
+                </div>
+                <div v-on:click="chooseBigStairs">
+                    <div class="combo"><p>Big straight:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.bigStairs == undefined">{{$store.getters.bigStairs}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.bigStairs}}</div>
+                </div>
+                <div v-on:click="chooseHouse">
+                    <div class="combo"><p>Full house:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.house == undefined">{{$store.getters.house}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.house}}</div>
+                </div>
+                <div v-on:click="chooseChance">
+                    <div class="combo"><p>Chance:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.chance == undefined">{{$store.getters.chance}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.chance}}</div>
+                </div>
+                <div v-on:click="chooseYatzy">
+                    <div class="combo"><p>YATZY:</p></div>
+                    <div class="value" v-bind:style="{color: '#AAA'}" v-if="$store.state.scores.yatzy == undefined">{{$store.getters.yatzy}}</div>
+                    <div class="value" v-bind:style="{color: 'black'}" v-else>{{$store.state.scores.yatzy}}</div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script src="https://unpkg.com/vuex@3.1.0/dist/vuex.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="script.js"></script>
+</html>
