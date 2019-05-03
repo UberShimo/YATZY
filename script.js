@@ -325,9 +325,7 @@ const store = new Vuex.Store({
                     }
                 }
             }
-            else{
-                return 0;
-            }
+            return 0;
         }
     },
     mutations:{
